@@ -16,6 +16,7 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         val subjectTextView: TextView = itemView.findViewById(R.id.lesson)
         val teacherTextView: TextView = itemView.findViewById(R.id.teacher)
         val audTextView: TextView = itemView.findViewById(R.id.aud)
+        val currentDayTextView: TextView = itemView.findViewById(R.id.currentDay)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -33,6 +34,7 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         holder.subjectTextView.text = item.lesson
         holder.teacherTextView.text = item.teacher
         holder.audTextView.text = item.aud
+        holder.currentDayTextView.text = item.currentDay
     }
 
     override fun getItemCount(): Int {

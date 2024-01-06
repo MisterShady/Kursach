@@ -2,8 +2,6 @@ package com.example.kursach
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,21 +47,18 @@ class MainActivity : AppCompatActivity() {
                         val responseBody = response.body()?.string()
                         Log.d("Schedule", "Response body: $responseBody")
 
-                        // Парсинг HTML с использованием jsoup
                         val scheduleItems = parseHtmlForSchedule(responseBody)
                         updateScheduleUI(scheduleItems)
                     } catch (e: Exception) {
                         Log.e("Schedule", "Error parsing response", e)
                     }
                 } else {
-                    // Обработка ошибки
                     Log.e("Schedule", "Error: ${response.code()}")
                     Log.e("Schedule", response.errorBody()?.string() ?: "Error body is null")
                 }
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                // Обработка ошибки
                 Log.e("Schedule", "Failed to load schedule", t)
             }
         })
@@ -73,33 +68,46 @@ class MainActivity : AppCompatActivity() {
         val scheduleItems = mutableListOf<ScheduleItem>()
 
         if (!html.isNullOrEmpty()) {
-            // Используем jsoup для парсинга HTML
             val doc: Document = Jsoup.parse(html)
             Log.d("Schedule", "Parsed HTML: $doc")
 
-            // Ищем все элементы с указанными классами
             val rows = doc.select("tr:has(td)")
 
+            var currentDay = ""
             for (row in rows) {
-                val columns = row.select("td")
+                try {
+                    val columns = row.select("td")
 
-                if (columns.size == 6) { // Убедимся, что у нас достаточно столбцов для пары
-                    val num = columns[0].text()
-                    val time = columns[1].text()
-                    val lessonType = columns[2].text()
-                    val lesson = columns[3].text()
-                    val teacher = columns[4].text()
-                    val aud = columns[5].text()
+                    if (columns.size == 1) {
+                        // Это строка с названием дня
+                        val headerDay = columns.select("span.dnmrt span.h3 b")
+                        if (headerDay.isNotEmpty()) {
+                            currentDay = headerDay.text().trim()
+                        }
+                    } else if (columns.size == 6) {
+                        // Это строка с расписанием
+                        val num = columns[0].text()
+                        val time = columns[1].text()
+                        val lessonType = columns[2].text()
+                        val lesson = columns[3].text()
+                        val teacher = columns[4].text()
+                        val aud = columns[5].text()
 
-                    val subject = "$lessonType $lesson"
-                    val scheduleItem = ScheduleItem(num, time, lessonType, lesson, teacher, aud)
-                    scheduleItems.add(scheduleItem)
+                        val scheduleItem = ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
+                        scheduleItems.add(scheduleItem)
+                    } else {
+                        Log.e("Schedule", "Unexpected number of columns in a row: ${columns.size}")
+                    }
+                } catch (e: Exception) {
+                    Log.e("Schedule", "Error parsing schedule item", e)
                 }
             }
         }
 
+        Log.d("Schedule", "Parsed schedule items: $scheduleItems")
         return scheduleItems
     }
+
 
     private fun updateScheduleUI(scheduleItems: List<ScheduleItem>) {
         val recyclerView: RecyclerView = findViewById(R.id.scheduleContainer)
