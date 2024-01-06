@@ -20,12 +20,18 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
-    private val retrofit = Retrofit.Builder()
-        .baseUrl("https://bsuedu.ru/bsu/education/schedule/")
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
+    private val retrofit: Retrofit by lazy {
+        Retrofit.Builder()
+            .baseUrl("https://bsuedu.ru/bsu/education/schedule/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+    }
 
-    private val apiService = retrofit.create(ApiService::class.java)
+
+    private val apiService by lazy {
+        retrofit.create(ApiService::class.java)
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -85,7 +91,6 @@ class MainActivity : AppCompatActivity() {
                             currentDay = headerDay.text().trim()
                         }
                     } else if (columns.size == 6) {
-                        // Это строка с расписанием
                         val num = columns[0].text()
                         val time = columns[1].text()
                         val lessonType = columns[2].text()
@@ -110,13 +115,11 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun updateScheduleUI(scheduleItems: List<ScheduleItem>) {
-        val recyclerView: RecyclerView = findViewById(R.id.scheduleContainer)
+        val recyclerView: RecyclerView = binding.scheduleContainer
 
-        // Создайте экземпляр адаптера и установите его для RecyclerView
         val adapter = ScheduleAdapter(scheduleItems)
         recyclerView.adapter = adapter
 
-        // Установите менеджер макетов (layout manager) для RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
