@@ -1,0 +1,129 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp">
+
+    <!-- Верхний блок с синим фоном, надписью "День" и "Дата" -->
+    <LinearLayout
+        android:id="@+id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/holo_blue_light"
+        android:padding="8dp">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="День"
+            android:textColor="@android:color/white"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Дата"
+            android:textColor="@android:color/white"
+            android:gravity="end"
+            android:textStyle="bold" />
+
+    </LinearLayout>
+
+    <!-- Следующий блок с надписью "Номер пары", "Время", "Тип", "Номер п/г", "Онлайн",
+         "Название предмета", "Преподаватель", "Аудитория" -->
+    <LinearLayout
+        android:layout_below="@id/topLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="6dp">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/num"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Номер пары"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Время" />
+
+        </LinearLayout>
+
+        <!-- Блок справа от Номера пары и Времени -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <!-- "Тип", "Номер п/г", "Онлайн" -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/lessonType"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Тип"
+                    android:textColor="@android:color/white"
+                    android:background="#FF1E88E5" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Номер п/г"
+                    android:textColor="@android:color/white"
+                    android:background="#FF009688" />
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Онлайн"
+                    android:textColor="@android:color/white"
+                    android:background="#FF3F51B5" />
+            </LinearLayout>
+
+            <!-- Добавлено расстояние между блоками -->
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="8dp" />
+
+            <!-- "Название предмета", "Преподаватель", "Аудитория" -->
+            <TextView
+                android:id="@+id/lesson"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Название предмета"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/teacher"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Преподаватель" />
+
+            <TextView
+                android:id="@+id/aud"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Аудитория" />
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>

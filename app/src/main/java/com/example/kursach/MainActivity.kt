@@ -2,7 +2,11 @@ package com.example.kursach
 
 import android.os.Bundle
 import android.util.Log
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import retrofit2.Call
@@ -88,7 +92,7 @@ class MainActivity : AppCompatActivity() {
                     val aud = columns[5].text()
 
                     val subject = "$lessonType $lesson"
-                    val scheduleItem = ScheduleItem(subject, teacher, aud, time)
+                    val scheduleItem = ScheduleItem(num, time, lessonType, lesson, teacher, aud)
                     scheduleItems.add(scheduleItem)
                 }
             }
@@ -97,15 +101,15 @@ class MainActivity : AppCompatActivity() {
         return scheduleItems
     }
 
-
     private fun updateScheduleUI(scheduleItems: List<ScheduleItem>) {
-        // Очищаем текущий текст
-        binding.scheduleTextView.text = ""
+        val recyclerView: RecyclerView = findViewById(R.id.scheduleContainer)
 
-        // Добавляем новые элементы
-        for (item in scheduleItems) {
-            val displayText = "${item.subject} - ${item.teacher} - ${item.room} - ${item.time}"
-            binding.scheduleTextView.append("$displayText\n")
-        }
+        // Создайте экземпляр адаптера и установите его для RecyclerView
+        val adapter = ScheduleAdapter(scheduleItems)
+        recyclerView.adapter = adapter
+
+        // Установите менеджер макетов (layout manager) для RecyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
     }
+
 }

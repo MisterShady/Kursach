@@ -1,8 +1,10 @@
 package com.example.kursach
 
 data class ScheduleItem(
-    val subject: String,
+    val num: String,
+    val time: String,
+    val lessonType: String,
+    val lesson: String,
     val teacher: String,
-    val room: String,
-    val time: String
+    val aud: String
 )

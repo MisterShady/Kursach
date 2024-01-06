@@ -6,37 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:id="@+id/scheduleTextView"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scheduleContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/nextWeekButton"
-        tools:ignore="MissingConstraints" />
+        tools:listitem="@layout/item_layout"/>
 
-    <Button
-        android:id="@+id/previousWeekButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Предыдущая неделя"
-        app:layout_constraintTop_toBottomOf="@+id/scheduleTextView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
 
-    <Button
-        android:id="@+id/nextWeekButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Следующая неделя"
-        app:layout_constraintTop_toBottomOf="@+id/previousWeekButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
