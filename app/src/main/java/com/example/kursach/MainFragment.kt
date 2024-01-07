@@ -115,19 +115,19 @@ class MainFragment : Fragment() {
 
     private fun loadSchedule(group: String, week: String) {
         viewModel.loadSchedule(group, week)
-        viewModel.subjectItems.observe(viewLifecycleOwner) {
+        viewModel.scheduleItems.observe(viewLifecycleOwner) {
             updateScheduleUI(it)
         }
     }
 
-    private fun updateScheduleUI(subjectItems: List<SubjectItem>) {
+    private fun updateScheduleUI(scheduleItems: List<ScheduleItem>) {
         val recyclerView: RecyclerView = binding.scheduleRecyclerView
-        if (subjectItems.isEmpty()) {
+        if (scheduleItems.isEmpty()) {
             val noClassesTextView: TextView = binding.noClassesTextView
             noClassesTextView.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            val adapter = SubjectAdapter(subjectItems)
+            val adapter = ScheduleAdapter(scheduleItems)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             val noClassesTextView: TextView = binding.noClassesTextView

@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class SubjectAdapter(private val subjectItems: List<SubjectItem>) : RecyclerView.Adapter<SubjectAdapter.ViewHolder>() {
+class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTextView: TextView = itemView.findViewById(R.id.num)
@@ -23,7 +23,7 @@ class SubjectAdapter(private val subjectItems: List<SubjectItem>) : RecyclerView
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = subjectItems[position]
+        val item = scheduleItems[position]
 
         // Устанавливаем значения в TextView из данных
         holder.numTextView.text = item.num
@@ -35,6 +35,6 @@ class SubjectAdapter(private val subjectItems: List<SubjectItem>) : RecyclerView
     }
 
     override fun getItemCount(): Int {
-        return subjectItems.size
+        return scheduleItems.size
     }
 }

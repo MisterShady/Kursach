@@ -1,7 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp">
+    android:paddingStart="16dp"
+    android:paddingEnd="16dp"
+    >
 
 
     <LinearLayout
@@ -53,7 +55,7 @@
                     android:layout_weight="1"
                     android:text="Тип"
                     android:textColor="@android:color/white"
-                    android:background="#FF1E88E5" />
+                    android:background="@android:color/holo_green_light" />
 
             </LinearLayout>
 
