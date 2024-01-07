@@ -14,6 +14,8 @@ import org.jsoup.nodes.Document
 
 class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
 
+    private var lastDay = ""
+
     private var _scheduleItems = MutableLiveData<List<ScheduleItem>>()
     val scheduleItems: LiveData<List<ScheduleItem>> = _scheduleItems
 
@@ -54,6 +56,7 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                         val scheduleItem =
                             ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
+                        currentDay = ""
                     }else if (columns.size == 4) {
                         val lessonType = columns[0].text()
                         val lesson = columns[1].text()
@@ -63,6 +66,7 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                         val scheduleItem =
                             ScheduleItem("", "", lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
+                        currentDay = ""
                     } else {
                         Log.e("Schedule", "Unexpected number of columns in a row: ${columns.size}")
                     }

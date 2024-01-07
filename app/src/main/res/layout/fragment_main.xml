@@ -96,7 +96,7 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scheduleRecyclerView"
-        tools:listitem="@layout/date_item"
+        tools:listitem="@layout/subject_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
