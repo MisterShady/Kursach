@@ -84,6 +84,18 @@
             android:src="@drawable/ic_arrow_right"/>
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/noClassesTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Занятий нету, отдыхаем)"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/headerBlock"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scheduleRecyclerView"

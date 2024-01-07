@@ -12,7 +12,7 @@ interface ScheduleApi {
     @POST("groups/show_schedule.php")
     fun loadSchedule(
         @Field("group") group: String,
-        @Field("week") week: String,
+        @Field("week") week: String = "",
         @Field("fak") fak: String = "",
         @Field("frm") frm: String = ""
     ): Call<ResponseBody>

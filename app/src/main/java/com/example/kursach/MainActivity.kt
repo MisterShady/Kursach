@@ -2,6 +2,8 @@ package com.example.kursach
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
@@ -19,6 +21,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import okhttp3.ResponseBody
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class MainActivity : AppCompatActivity() {
@@ -35,19 +41,8 @@ class MainActivity : AppCompatActivity() {
         retrofit.create(ScheduleApi::class.java)
     }
 
-    private val currentDateApi by lazy {
-        currentDateRetrofit.create(CurrentDateApi::class.java)
-    }
-
-    private val currentDateRetrofit: Retrofit by lazy {
-        Retrofit.Builder()
-            .baseUrl("https://bsuedu.ru/bsu/education/schedule/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-    }
 
     private lateinit var textDate: TextView
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -58,42 +53,75 @@ class MainActivity : AppCompatActivity() {
 
         textDate = findViewById(R.id.textDate)
 
-        loadCurrentDate()
+        // Установим начальное значение для textDate при запуске
+        val currentDateString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(Calendar.getInstance().time)
+        val endCalendar = Calendar.getInstance()
+        endCalendar.add(Calendar.DATE, 6)
+        val endDateString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(endCalendar.time)
+        textDate.text = "$currentDateString - $endDateString"
 
-        loadSchedule("12002108", "0801202414012024")
-    }
+        loadSchedule("12002108")
 
-    private fun loadCurrentDate() {
-        GlobalScope.launch(Dispatchers.IO) {
-            try {
-                val response = currentDateApi.getCurrentDate()
-                if (response.isSuccessful) {
-                    val currentDateList = response.body()
-                    if (currentDateList != null && currentDateList.size >= 2) {
-                        val currentDate = currentDateList[1] // Второй элемент массива
+        val iconLeft: ImageView = findViewById(R.id.iconLeft)
+        val iconRight: ImageView = findViewById(R.id.iconRight)
 
-                        runOnUiThread {
-                            textDate.text = currentDate
-                        }
-                    } else {
-                        Log.e("CurrentDate", "Invalid response body format")
-                    }
-                } else {
-                    Log.e("CurrentDate", "Error: ${response.code()}")
-                    Log.e("CurrentDate", response.errorBody()?.string() ?: "Error body is null")
-                }
-            } catch (e: Exception) {
-                Log.e("CurrentDate", "Failed to load current date", e)
-            }
+        iconLeft.setOnClickListener {
+            // Обработчик клика по стрелке влево
+            loadNextWeek(false)
+        }
+
+        iconRight.setOnClickListener {
+            // Обработчик клика по стрелке вправо
+            loadNextWeek(true)
         }
     }
 
+    private fun loadNextWeek(isNext: Boolean) {
+        val formatter = SimpleDateFormat("ddMMyyyy", Locale.getDefault())
 
+        try {
+            val startDate = formatter.parse(currentWeek.substring(0, 8))
+            val endDate = formatter.parse(currentWeek.substring(8))
 
-    private fun loadSchedule(group: String, week: String) {
-        Log.d("Schedule", "Loading schedule for group: $group, week: $week")
+            val startCalendar = Calendar.getInstance()
+            startCalendar.time = startDate
 
-        val call = ScheduleApi.loadSchedule(group, week)
+            val endCalendar = Calendar.getInstance()
+            endCalendar.time = endDate
+
+            if (isNext) {
+                startCalendar.add(Calendar.DATE, 7)
+                endCalendar.add(Calendar.DATE, 7)
+            } else {
+                startCalendar.add(Calendar.DATE, -7)
+                endCalendar.add(Calendar.DATE, -7)
+            }
+
+            val newStartDate = formatter.format(startCalendar.time)
+            val newEndDate = formatter.format(endCalendar.time)
+
+            currentWeek = "$newStartDate$newEndDate"
+
+            // Обновляем значение textDate
+            val currentDateString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startCalendar.time)
+            val endDateString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(endCalendar.time)
+
+            textDate.text = "$currentDateString - $endDateString"
+
+            // Добавьте следующую строку для вывода значения недели в Logcat
+            Log.d("WeekSwitch", "Switched to week: $currentWeek")
+
+            loadSchedule("12002108")
+        } catch (e: ParseException) {
+            Log.e("WeekSwitch", "Error parsing date", e)
+        }
+    }
+
+    private var currentWeek: String = "0101202407012024" // Начальное значение
+
+    private fun loadSchedule(group: String) {
+
+        val call = ScheduleApi.loadSchedule(group, currentWeek)
         call.enqueue(object : Callback<ResponseBody> {
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                 if (response.isSuccessful) {
@@ -169,12 +197,28 @@ class MainActivity : AppCompatActivity() {
     private fun updateScheduleUI(scheduleItems: List<ScheduleItem>) {
         val recyclerView: RecyclerView = binding.scheduleRecyclerView
 
-        val adapter = ScheduleAdapter(scheduleItems)
+        if (scheduleItems.isEmpty()) {
+            // Если расписание пусто, выводим сообщение
+            val noClassesTextView: TextView = binding.noClassesTextView
+            noClassesTextView.visibility = View.VISIBLE
 
-        recyclerView.adapter = adapter
+            // Скрываем RecyclerView
+            recyclerView.visibility = View.GONE
+        } else {
+            // Если есть занятия, отображаем их в RecyclerView
+            val adapter = ScheduleAdapter(scheduleItems)
+            recyclerView.adapter = adapter
+            recyclerView.layoutManager = LinearLayoutManager(this)
 
-        recyclerView.layoutManager = LinearLayoutManager(this)
+            // Скрываем сообщение о отсутствии занятий
+            val noClassesTextView: TextView = binding.noClassesTextView
+            noClassesTextView.visibility = View.GONE
+
+            // Показываем RecyclerView
+            recyclerView.visibility = View.VISIBLE
+        }
     }
+
 
 
 }
