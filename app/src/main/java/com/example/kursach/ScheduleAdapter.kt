@@ -9,7 +9,6 @@ import androidx.recyclerview.widget.RecyclerView
 class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        // Определите TextView здесь, например:
         val numTextView: TextView = itemView.findViewById(R.id.num)
         val timeTextView: TextView = itemView.findViewById(R.id.time)
         val typeTextView: TextView = itemView.findViewById(R.id.lessonType)
