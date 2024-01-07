@@ -3,30 +3,8 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
-    <!-- Верхний блок с синим фоном, надписью "День" и "Дата" -->
-    <LinearLayout
-        android:id="@+id/topLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:background="@android:color/holo_blue_light"
-        android:elevation="8dp"
-        android:padding="8dp">
-
-        <TextView
-            android:id="@+id/currentDay"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Дата"
-            android:textColor="@android:color/white"
-            android:textStyle="bold" />
-
-
-    </LinearLayout>
 
     <LinearLayout
-        android:layout_below="@id/topLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"

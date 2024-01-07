@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+class SubjectAdapter(private val subjectItems: List<SubjectItem>) : RecyclerView.Adapter<SubjectAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTextView: TextView = itemView.findViewById(R.id.num)
@@ -15,16 +15,15 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         val subjectTextView: TextView = itemView.findViewById(R.id.lesson)
         val teacherTextView: TextView = itemView.findViewById(R.id.teacher)
         val audTextView: TextView = itemView.findViewById(R.id.aud)
-        val currentDayTextView: TextView = itemView.findViewById(R.id.currentDay)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_layout, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.subject_item, parent, false)
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = scheduleItems[position]
+        val item = subjectItems[position]
 
         // Устанавливаем значения в TextView из данных
         holder.numTextView.text = item.num
@@ -33,10 +32,9 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         holder.subjectTextView.text = item.lesson
         holder.teacherTextView.text = item.teacher
         holder.audTextView.text = item.aud
-        holder.currentDayTextView.text = item.currentDay
     }
 
     override fun getItemCount(): Int {
-        return scheduleItems.size
+        return subjectItems.size
     }
 }
