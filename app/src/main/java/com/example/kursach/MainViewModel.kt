@@ -54,6 +54,15 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                         val scheduleItem =
                             ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
+                    }else if (columns.size == 4) {
+                        val lessonType = columns[0].text()
+                        val lesson = columns[1].text()
+                        val teacher = columns[2].text()
+                        val aud = columns[3].text()
+
+                        val scheduleItem =
+                            ScheduleItem("", "", lessonType, lesson, teacher, aud, currentDay)
+                        scheduleItems.add(scheduleItem)
                     } else {
                         Log.e("Schedule", "Unexpected number of columns in a row: ${columns.size}")
                     }
