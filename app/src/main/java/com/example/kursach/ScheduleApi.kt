@@ -6,7 +6,7 @@ import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
 import retrofit2.http.POST
 
-interface ApiService {
+interface ScheduleApi {
 
     @FormUrlEncoded
     @POST("groups/show_schedule.php")
