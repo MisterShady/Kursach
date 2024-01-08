@@ -2,27 +2,27 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
-    android:paddingEnd="16dp"
-    >
+    android:paddingEnd="16dp">
 
     <TextView
         android:id="@+id/weekDay"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_light"
+        android:paddingStart="10dp"
         android:text="Дата"
         android:textColor="@android:color/white"
-        android:background="@android:color/holo_blue_light"
-        android:textStyle="bold"
-        android:paddingStart="10dp"/>
+        android:textStyle="bold" />
 
 
     <LinearLayout
+        android:id="@+id/subjectItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginTop="22dp"
         android:background="#FFFFFF"
         android:elevation="8dp"
-        android:layout_marginTop="22dp">
+        android:orientation="horizontal">
 
 
         <LinearLayout
@@ -64,9 +64,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:background="@android:color/holo_green_light"
                     android:text="Тип"
-                    android:textColor="@android:color/white"
-                    android:background="@android:color/holo_green_light" />
+                    android:textColor="@android:color/white" />
 
             </LinearLayout>
 
@@ -94,6 +94,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Аудитория" />
+
+            <TextView
+                android:id="@+id/emptyTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="start"
+                android:text="Заметка"
+                android:textStyle="bold"
+                android:visibility="gone"/>
+
+            <Button
+                android:id="@+id/addNoteButton"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:layout_gravity="end"
+                android:background="@android:color/holo_blue_light"
+                android:padding="5dp"
+                android:text="Добавить заметку"
+                android:textColor="@android:color/white"
+                android:textSize="10sp"
+                android:visibility="gone"/>
         </LinearLayout>
+
     </LinearLayout>
+
 </RelativeLayout>

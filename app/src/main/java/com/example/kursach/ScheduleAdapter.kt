@@ -3,6 +3,7 @@ package com.example.kursach
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
@@ -16,6 +17,7 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         val teacherTextView: TextView = itemView.findViewById(R.id.teacher)
         val audTextView: TextView = itemView.findViewById(R.id.aud)
         val weekDayTextView: TextView = itemView.findViewById(R.id.weekDay)
+        val addNoteButton: Button = itemView.findViewById(R.id.addNoteButton)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -37,6 +39,23 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         if( item.currentDay == "") {
             holder.weekDayTextView.visibility = View.GONE
         }
+
+        var isAddNoteButtonVisible = false
+
+        holder.itemView.setOnClickListener {
+            it.animate().scaleX(0.95f).scaleY(0.95f).setDuration(100).withEndAction {
+                it.animate().scaleX(1f).scaleY(1f).setDuration(100).start()
+            }
+
+            if (isAddNoteButtonVisible) {
+                holder.addNoteButton.visibility = View.GONE
+            } else {
+                holder.addNoteButton.visibility = View.VISIBLE
+            }
+
+            isAddNoteButtonVisible = !isAddNoteButtonVisible
+        }
+
     }
 
     override fun getItemCount(): Int {

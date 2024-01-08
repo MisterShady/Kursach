@@ -14,7 +14,6 @@ import org.jsoup.nodes.Document
 
 class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
 
-    private var lastDay = ""
 
     private var _scheduleItems = MutableLiveData<List<ScheduleItem>>()
     val scheduleItems: LiveData<List<ScheduleItem>> = _scheduleItems
