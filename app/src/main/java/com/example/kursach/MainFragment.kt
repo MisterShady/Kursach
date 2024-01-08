@@ -1,11 +1,14 @@
 package com.example.kursach
 
 import android.os.Bundle
+import android.text.InputType
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -22,17 +25,18 @@ class MainFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var textDate: TextView
     private val viewModel: MainViewModel by viewModels { MainViewModel.Factory() }
+    private var currentGroup: String = "12002108"
+    private lateinit var textGroup: TextView
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
         super.onCreate(savedInstanceState)
         _binding = FragmentMainBinding.inflate(layoutInflater, container, false)
-        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         textDate = binding.textDate
         setCurrentWeek()
         Log.d("Week", "Current Week: $currentWeek")
-        loadSchedule("12002108", currentWeek)
+        loadSchedule(currentGroup, currentWeek)
         binding.iconLeft.setOnClickListener {
             loadNextWeek(false)
         }
@@ -40,7 +44,36 @@ class MainFragment : Fragment() {
         binding.iconRight.setOnClickListener {
             loadNextWeek(true)
         }
+
+        binding.textGroup.setOnClickListener {
+            showGroupInputDialog()
+        }
         return binding.root
+    }
+
+    private fun showGroupInputDialog() {
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setTitle("Введите новую группу")
+
+        val input = EditText(requireContext())
+        input.inputType = InputType.TYPE_CLASS_TEXT
+        input.setText(currentGroup) // Устанавливаем текущую группу в поле ввода
+        builder.setView(input)
+
+        builder.setPositiveButton("OK") { _, _ ->
+            currentGroup = input.text.toString()
+            textGroup.text = "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
+            updateScheduleForGroup(currentGroup)
+        }
+
+        builder.setNegativeButton("Отмена") { dialog, _ -> dialog.cancel() }
+
+        builder.show()
+    }
+
+
+    private fun updateScheduleForGroup(newGroup: String) {
+        loadSchedule(currentGroup, currentWeek)
     }
 
     private fun setCurrentWeek() {
@@ -57,9 +90,7 @@ class MainFragment : Fragment() {
 
         val endCalendar = Calendar.getInstance()
         endCalendar.time = startCalendar.time
-        endCalendar.add(
-            Calendar.DATE, 6
-        ) // Добавим 6 дней, чтобы получить воскресенье текущей недели
+        endCalendar.add(Calendar.DATE, 6) // Добавим 6 дней, чтобы получить воскресенье текущей недели
 
         val startDateString = formatter.format(startCalendar.time)
         val endDateString = formatter.format(endCalendar.time)
@@ -67,49 +98,48 @@ class MainFragment : Fragment() {
         currentWeek = "$startDateString$endDateString"
 
         textDate.text = "$startDateString - $endDateString"
+        textGroup = binding.textGroup
+        textGroup.text = "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
     }
+
 
 
     private fun loadNextWeek(isNext: Boolean) {
         val formatter = SimpleDateFormat("ddMMyyyy", Locale.getDefault())
+        val startDate = formatter.parse(currentWeek.substring(0, 8))
+        val endDate = formatter.parse(currentWeek.substring(8))
 
-        try {
-            val startDate = formatter.parse(currentWeek.substring(0, 8))
-            val endDate = formatter.parse(currentWeek.substring(8))
+        val startCalendar = Calendar.getInstance()
+        startCalendar.time = startDate
 
-            val startCalendar = Calendar.getInstance()
-            startCalendar.time = startDate
+        val endCalendar = Calendar.getInstance()
+        endCalendar.time = endDate
 
-            val endCalendar = Calendar.getInstance()
-            endCalendar.time = endDate
-
-            if (isNext) {
-                startCalendar.add(Calendar.DATE, 7)
-                endCalendar.add(Calendar.DATE, 7)
-            } else {
-                startCalendar.add(Calendar.DATE, -7)
-                endCalendar.add(Calendar.DATE, -7)
-            }
-
-            val newStartDate = formatter.format(startCalendar.time)
-            val newEndDate = formatter.format(endCalendar.time)
-
-            currentWeek = "$newStartDate$newEndDate"
-
-            val currentDateString =
-                SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startCalendar.time)
-            val endDateString =
-                SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(endCalendar.time)
-
-            textDate.text = "$currentDateString - $endDateString"
-
-            Log.d("WeekSwitch", "Switched to week: $currentWeek")
-
-            loadSchedule("12002108", currentWeek)
-        } catch (e: ParseException) {
-            Log.e("WeekSwitch", "Error parsing date", e)
+        if (isNext) {
+            startCalendar.add(Calendar.DATE, 7)
+            endCalendar.add(Calendar.DATE, 7)
+        } else {
+            startCalendar.add(Calendar.DATE, -7)
+            endCalendar.add(Calendar.DATE, -7)
         }
+
+        val newStartDate = formatter.format(startCalendar.time)
+        val newEndDate = formatter.format(endCalendar.time)
+
+        currentWeek = "$newStartDate$newEndDate"
+
+        val currentDateString =
+            SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startCalendar.time)
+        val endDateString =
+            SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(endCalendar.time)
+
+        textDate.text = "$currentDateString - $endDateString"
+
+        Log.d("WeekSwitch", "Switched to week: $currentWeek")
+
+        loadSchedule(currentGroup, currentWeek) // Используем текущую группу
     }
+
 
     private var currentWeek: String = "0101202407012024"
 
