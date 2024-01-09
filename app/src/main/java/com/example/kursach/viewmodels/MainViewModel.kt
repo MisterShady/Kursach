@@ -32,7 +32,6 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
 
         if (!html.isNullOrEmpty()) {
             val doc: Document = Jsoup.parse(html)
-            Log.d("Schedule", "Parsed HTML: $doc")
 
             val rows = doc.select("tr:has(td)")
 
@@ -42,7 +41,7 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                     val columns = row.select("td")
 
                     if (columns.size == 1) {
-                        val headerDay = columns.select("span.dnmrt span.h3 b")
+                        val headerDay = columns.select("span.h3 b")
                         if (headerDay.isNotEmpty()) {
                             currentDay = headerDay.text().trim()
                         }
@@ -54,20 +53,17 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                         val teacher = columns[4].text()
                         val aud = columns[5].text()
 
-                        val scheduleItem =
-                            ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
+                        val scheduleItem = ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
                         currentDay = "$currentDay "
-                    }else if (columns.size == 4) {
+                    } else if (columns.size == 4) {
                         val lessonType = columns[0].text()
                         val lesson = columns[1].text()
                         val teacher = columns[2].text()
                         val aud = columns[3].text()
 
-                        val scheduleItem =
-                            ScheduleItem("", "", lessonType, lesson, teacher, aud, currentDay)
+                        val scheduleItem = ScheduleItem("", "", lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
-                        currentDay = ""
                     } else {
                         Log.e("Schedule", "Unexpected number of columns in a row: ${columns.size}")
                     }
