@@ -1,4 +1,4 @@
-package com.example.kursach
+package com.example.kursach.data
 
 
 import okhttp3.ResponseBody

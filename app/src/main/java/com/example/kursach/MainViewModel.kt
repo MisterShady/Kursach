@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.kursach.data.ScheduleRetrofit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import org.jsoup.Jsoup
@@ -55,7 +56,7 @@ class MainViewModel(private val retrofit: ScheduleRetrofit) : ViewModel() {
                         val scheduleItem =
                             ScheduleItem(num, time, lessonType, lesson, teacher, aud, currentDay)
                         scheduleItems.add(scheduleItem)
-                        currentDay = ""
+                        currentDay = "$currentDay "
                     }else if (columns.size == 4) {
                         val lessonType = columns[0].text()
                         val lesson = columns[1].text()

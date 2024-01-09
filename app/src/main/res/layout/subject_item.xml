@@ -96,7 +96,7 @@
                 android:text="Аудитория" />
 
             <TextView
-                android:id="@+id/emptyTextView"
+                android:id="@+id/noteTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="start"
@@ -111,7 +111,7 @@
                 android:layout_gravity="end"
                 android:background="@android:color/holo_blue_light"
                 android:padding="5dp"
-                android:text="Добавить заметку"
+                android:text="К заметке"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"
                 android:visibility="gone"/>

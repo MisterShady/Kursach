@@ -9,13 +9,12 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.kursach.databinding.FragmentMainBinding
-import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -62,7 +61,8 @@ class MainFragment : Fragment() {
 
         builder.setPositiveButton("OK") { _, _ ->
             currentGroup = input.text.toString()
-            textGroup.text = "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
+            textGroup.text =
+                "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
             updateScheduleForGroup(currentGroup)
         }
 
@@ -90,7 +90,9 @@ class MainFragment : Fragment() {
 
         val endCalendar = Calendar.getInstance()
         endCalendar.time = startCalendar.time
-        endCalendar.add(Calendar.DATE, 6) // Добавим 6 дней, чтобы получить воскресенье текущей недели
+        endCalendar.add(
+            Calendar.DATE, 6
+        ) // Добавим 6 дней, чтобы получить воскресенье текущей недели
 
         val startDateString = formatter.format(startCalendar.time)
         val endDateString = formatter.format(endCalendar.time)
@@ -99,9 +101,9 @@ class MainFragment : Fragment() {
 
         textDate.text = "$startDateString - $endDateString"
         textGroup = binding.textGroup
-        textGroup.text = "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
+        textGroup.text =
+            "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
     }
-
 
 
     private fun loadNextWeek(isNext: Boolean) {
@@ -157,7 +159,7 @@ class MainFragment : Fragment() {
             noClassesTextView.visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
-            val adapter = ScheduleAdapter(scheduleItems)
+            val adapter = ScheduleAdapter(scheduleItems, action)
             recyclerView.adapter = adapter
             recyclerView.layoutManager = LinearLayoutManager(requireContext())
             val noClassesTextView: TextView = binding.noClassesTextView
@@ -166,4 +168,16 @@ class MainFragment : Fragment() {
         }
     }
 
+    private val action = object : ActionInterface {
+        override fun onButtonClick(currentDay: String, lesson: String) {
+            val action = MainFragmentDirections.actionMainFragmentToNoteFragment(currentDay, lesson)
+            findNavController().navigate(action)
+        }
+    }
+
+}
+
+interface ActionInterface {
+
+    fun onButtonClick(currentDay: String, lesson: String)
 }

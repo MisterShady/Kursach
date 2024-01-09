@@ -7,7 +7,10 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
+class ScheduleAdapter(
+    private val scheduleItems: List<ScheduleItem>,
+    private val action: ActionInterface
+) : RecyclerView.Adapter<ScheduleAdapter.ViewHolder>() {
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val numTextView: TextView = itemView.findViewById(R.id.num)
@@ -21,7 +24,8 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.subject_item, parent, false)
+        val itemView =
+            LayoutInflater.from(parent.context).inflate(R.layout.subject_item, parent, false)
         return ViewHolder(itemView)
     }
 
@@ -36,7 +40,7 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
         holder.teacherTextView.text = item.teacher
         holder.audTextView.text = item.aud
         holder.weekDayTextView.text = item.currentDay
-        if( item.currentDay == "") {
+        if (item.currentDay.endsWith(" ")) {
             holder.weekDayTextView.visibility = View.GONE
         }
 
@@ -54,6 +58,10 @@ class ScheduleAdapter(private val scheduleItems: List<ScheduleItem>) : RecyclerV
             }
 
             isAddNoteButtonVisible = !isAddNoteButtonVisible
+        }
+
+        holder.addNoteButton.setOnClickListener {
+            action.onButtonClick(item.currentDay, item.lesson)
         }
 
     }
