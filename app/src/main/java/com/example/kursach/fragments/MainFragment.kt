@@ -1,4 +1,4 @@
-package com.example.kursach
+package com.example.kursach.fragments
 
 import android.os.Bundle
 import android.text.InputType
@@ -14,7 +14,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kursach.ScheduleAdapter
+import com.example.kursach.ScheduleItem
 import com.example.kursach.databinding.FragmentMainBinding
+import com.example.kursach.viewmodels.MainViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -79,30 +82,28 @@ class MainFragment : Fragment() {
     private fun setCurrentWeek() {
         val formatter = SimpleDateFormat("ddMMyyyy", Locale.getDefault())
         val currentDate = Calendar.getInstance().time
+
         val startCalendar = Calendar.getInstance()
         startCalendar.time = currentDate
-
-        // Если текущий день не понедельник, установим начало недели на предыдущий понедельник
-        if (startCalendar.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
-            startCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
-            startCalendar.add(Calendar.WEEK_OF_YEAR, -1)
-        }
+        startCalendar.firstDayOfWeek = Calendar.MONDAY
+        startCalendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY)
 
         val endCalendar = Calendar.getInstance()
         endCalendar.time = startCalendar.time
-        endCalendar.add(
-            Calendar.DATE, 6
-        ) // Добавим 6 дней, чтобы получить воскресенье текущей недели
+        endCalendar.firstDayOfWeek = Calendar.MONDAY
+        endCalendar.add(Calendar.DATE, 6)
 
         val startDateString = formatter.format(startCalendar.time)
         val endDateString = formatter.format(endCalendar.time)
 
         currentWeek = "$startDateString$endDateString"
 
-        textDate.text = "$startDateString - $endDateString"
+        val currentDateString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(startCalendar.time)
+        val endDateFormattedString = SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()).format(endCalendar.time)
+
+        textDate.text = "$currentDateString - $endDateFormattedString"
         textGroup = binding.textGroup
-        textGroup.text =
-            "Группа $currentGroup" // Обновляем текст в textGroup после изменения группы
+        textGroup.text = "Группа $currentGroup"
     }
 
 
@@ -143,7 +144,7 @@ class MainFragment : Fragment() {
     }
 
 
-    private var currentWeek: String = "0101202407012024"
+    private var currentWeek: String = "0901202414012024"
 
     private fun loadSchedule(group: String, week: String) {
         viewModel.loadSchedule(group, week)
@@ -170,7 +171,11 @@ class MainFragment : Fragment() {
 
     private val action = object : ActionInterface {
         override fun onButtonClick(currentDay: String, lesson: String) {
-            val action = MainFragmentDirections.actionMainFragmentToNoteFragment(currentDay, lesson)
+            val action =
+                com.example.kursach.fragments.MainFragmentDirections.actionMainFragmentToNoteFragment(
+                    currentDay,
+                    lesson
+                )
             findNavController().navigate(action)
         }
     }

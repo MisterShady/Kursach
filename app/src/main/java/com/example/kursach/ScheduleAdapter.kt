@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kursach.fragments.ActionInterface
 
 class ScheduleAdapter(
     private val scheduleItems: List<ScheduleItem>,

@@ -1,4 +1,4 @@
-package com.example.kursach
+package com.example.kursach.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

@@ -1,4 +1,4 @@
-package com.example.kursach
+package com.example.kursach.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.CreationExtras
+import com.example.kursach.ScheduleItem
 import com.example.kursach.data.ScheduleRetrofit
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -1,4 +1,4 @@
-package com.example.kursach
+package com.example.kursach.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -9,11 +9,12 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.kursach.databinding.FragmentNoteBinding
+import com.example.kursach.viewmodels.NoteViewModel
 
 
 class NoteFragment : Fragment() {
 
-    private val args by navArgs<NoteFragmentArgs>()
+    private val args by navArgs<com.example.kursach.fragments.NoteFragmentArgs>()
     private val currentDay by lazy { args.currentDay }
     private val lesson by lazy { args.lesson }
     private val viewModel: NoteViewModel by viewModels { NoteViewModel.Factory(currentDay, lesson) }
@@ -34,12 +35,14 @@ class NoteFragment : Fragment() {
 
         binding.saveButton.setOnClickListener {
             viewModel.saveScheduleItem(binding.editText.text.toString())
-            val action = NoteFragmentDirections.actionNoteFragmentToMainFragment()
+            val action =
+                com.example.kursach.fragments.NoteFragmentDirections.actionNoteFragmentToMainFragment()
             findNavController().navigate(action)
         }
 
         binding.backButton.setOnClickListener {
-            val action = NoteFragmentDirections.actionNoteFragmentToMainFragment()
+            val action =
+                com.example.kursach.fragments.NoteFragmentDirections.actionNoteFragmentToMainFragment()
             findNavController().navigate(action)
         }
 
